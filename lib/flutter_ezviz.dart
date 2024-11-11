@@ -1,8 +1,6 @@
-
-import 'flutter_ezviz_platform_interface.dart';
-
-class FlutterEzviz {
-  Future<String?> getPlatformVersion() {
-    return FlutterEzvizPlatform.instance.getPlatformVersion();
-  }
-}
+export 'package:flutter_ezviz/ezviz_definition.dart';
+export 'package:flutter_ezviz/ezviz_methods.dart';
+export 'package:flutter_ezviz/ezviz_utils.dart';
+export 'package:flutter_ezviz/ezviz.dart';
+export 'package:flutter_ezviz/ezviz_errorcode.dart';
+export 'package:flutter_ezviz/ezviz_player.dart';

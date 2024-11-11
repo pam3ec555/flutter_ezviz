@@ -66,3 +66,8 @@ android {
         }
     }
 }
+
+dependencies {
+    implementation "io.github.ezviz-open:ezviz-sdk:5.13"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
+}
