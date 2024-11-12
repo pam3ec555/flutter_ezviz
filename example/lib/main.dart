@@ -21,9 +21,9 @@ class _MyAppState extends State<MyApp> {
   Future<bool> initSDK() async {
     bool result;
     EzvizInitOptions options = EzvizInitOptions(
-        appKey: 'ab658cff26434f5085d276c23370273e',
+        appKey: 'd9766bc3005340419ae1d47c65e05064',
         accessToken:
-        'at.9vckb7393o78sumy2zu9jy3l5x5jqsn4-58fal9s2fb-02a0u1f-kyiiztys1',
+        'at.7xnvdkac0viviozodwbipk7uc8j1tr19-2a546ipvg1-0k1czjz-rdjdzgzlz',
         enableLog: true,
         enableP2P: false);
     try {
@@ -50,16 +50,16 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   EzvizPlayerController? playerController;
-  final String _deviceSerial = "D35923454";
+  final String _deviceSerial = "BD4027438";
   final int _cameraNo = 1;
-  final String _verifyCode = "RXPZFF";
+  final String _verifyCode = "GJSBSZ";
   DateTime _start = DateTime.now();
   DateTime _end = DateTime.now();
-  String _videoName = '0-流畅';
+  String _videoName = '0-Smooth';
   int _videoLevel = 0;
 
-  // 0-流畅，1-均衡，2-高清，3-超清
-  final List<String> _videoLevels = ['0-流畅', '1-均衡', '2-高清', '3-超清'];
+  // 0-Smooth, 1-Balanced, 2-HD, 3-UHD
+  final List<String> _videoLevels = ['0-Smooth', '1-Balanced', '2-HD', '3-UHD'];
   bool isShowPTZ = false;
 
   @override
@@ -120,7 +120,6 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             OutlinedButton(
               onPressed: () async {
-                // await playerController.initPlayerByDevice(_deviceSerial, _cameraNo);
                 final playerController = this.playerController;
                 if (playerController != null) {
                   await Future.wait([
@@ -130,7 +129,7 @@ class _HomeState extends State<Home> {
                   ]);
                 }
               },
-              child: Text('初始化播放器'),
+              child: Text('Initialize Player'),
             ),
             OutlinedButton(
               onPressed: () {
@@ -138,7 +137,7 @@ class _HomeState extends State<Home> {
                   isShowPTZ = !isShowPTZ;
                 });
               },
-              child: Text(isShowPTZ ? '关闭云台' : '开启云台'),
+              child: Text(isShowPTZ ? 'Close PTZ' : 'Open PTZ'),
             )
           ],
         ));
@@ -154,7 +153,7 @@ class _HomeState extends State<Home> {
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text('视频清晰度'),
+              title: Text('Video Quality'),
               trailing: DropdownButton(
                 value: _videoName,
                 items: _videoLevels.map<DropdownMenuItem<String>>((value) {
@@ -177,13 +176,13 @@ class _HomeState extends State<Home> {
                   onPressed: () async {
                     await playerController?.startRealPlay();
                   },
-                  child: Text('开启直播'),
+                  child: Text('Start Live'),
                 ),
                 OutlinedButton(
                   onPressed: () async {
                     await playerController?.stopRealPlay();
                   },
-                  child: Text('结束直播'),
+                  child: Text('Stop Live'),
                 ),
               ],
             )
@@ -201,7 +200,7 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           ListTile(
             title: Text(
-              '开始时间: ${_start.toString()}',
+              'Start Time: ${_start.toString()}',
               style: TextStyle(fontSize: 15, color: Colors.black54),
             ),
             trailing: OutlinedButton(
@@ -209,14 +208,14 @@ class _HomeState extends State<Home> {
                 onShowTime(context, _start, true);
               },
               child: Text(
-                '更改时间',
+                'Change Time',
                 style: TextStyle(color: Colors.blueAccent),
               ),
             ),
           ),
           ListTile(
             title: Text(
-              '结束时间: ${_end.toString()}',
+              'End Time: ${_end.toString()}',
               style: TextStyle(fontSize: 15, color: Colors.black54),
             ),
             trailing: OutlinedButton(
@@ -224,7 +223,7 @@ class _HomeState extends State<Home> {
                 onShowTime(context, _end, false);
               },
               child: Text(
-                '更改时间',
+                'Change Time',
                 style: TextStyle(color: Colors.blueAccent),
               ),
             ),
@@ -236,13 +235,13 @@ class _HomeState extends State<Home> {
                 onPressed: () async {
                   await playerController?.startReplay(_start, _end);
                 },
-                child: Text('回播开始'),
+                child: Text('Start Playback'),
               ),
               OutlinedButton(
                 onPressed: () async {
                   await playerController?.stopReplay();
                 },
-                child: Text('回播结束'),
+                child: Text('Stop Playback'),
               ),
             ],
           ),
@@ -381,13 +380,13 @@ class _HomeState extends State<Home> {
 
   Future<bool> onVideoLevel(BuildContext context, String name) async {
     int level = 0;
-    if (name == '0-流畅') {
+    if (name == '0-Smooth') {
       level = 0;
-    } else if (name == '1-均衡') {
+    } else if (name == '1-Balanced') {
       level = 1;
-    } else if (name == '2-高清') {
+    } else if (name == '2-HD') {
       level = 2;
-    } else if (name == '3-超清') {
+    } else if (name == '3-UHD') {
       level = 3;
     }
     setState(() {
@@ -401,10 +400,10 @@ class _HomeState extends State<Home> {
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
-            title: Text('变更视频清晰度需重新开始直播!'),
+            title: Text('Changing video quality requires restarting live stream!'),
             actions: <Widget>[
               OutlinedButton(
-                child: Text('关闭'),
+                child: Text('Close'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

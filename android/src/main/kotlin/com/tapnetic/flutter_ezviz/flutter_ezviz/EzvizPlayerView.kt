@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.FrameLayout
-import com.videogo.openapi.EZOpenSDK
+import com.videogo.openapi.EZGlobalSDK
 import com.videogo.openapi.EZPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -90,7 +90,8 @@ class EzvizPlayerView(context: Context) : FrameLayout(context), SurfaceHolder.Ca
     fun initPlayer(deviceSerial: String, cameraNo: Int) {
         player?.release()
         this.url = null
-        player = EZOpenSDK.getInstance().createPlayer(deviceSerial, cameraNo).apply {
+        Log.d(TAG, "deviceSerial: $deviceSerial, cameraNo: $cameraNo, instance = ${EZGlobalSDK.getInstance()}")
+        player = EZGlobalSDK.getInstance().createPlayer(deviceSerial, cameraNo).apply {
             setSurfaceHold(surfaceLayout.getSurfaceView()?.holder)
             setHandler(mHandler)
         }
@@ -103,7 +104,7 @@ class EzvizPlayerView(context: Context) : FrameLayout(context), SurfaceHolder.Ca
         player?.release()
         this.deviceSerial = null
         this.cameraNo = 0
-        player = EZOpenSDK.getInstance().createPlayerWithUrl(url).apply {
+        player = EZGlobalSDK.getInstance().createPlayerWithUrl(url).apply {
             setSurfaceHold(surfaceLayout.getSurfaceView()?.holder)
             setHandler(mHandler)
         }
@@ -123,7 +124,7 @@ class EzvizPlayerView(context: Context) : FrameLayout(context), SurfaceHolder.Ca
 
     fun startPlayback(startDate: Calendar, endDate: Calendar) {
         CoroutineScope(Dispatchers.IO).launch {
-            val list = EZOpenSDK.getInstance().searchRecordFileFromDevice(deviceSerial, cameraNo, startDate, endDate)
+            val list = EZGlobalSDK.getInstance().searchRecordFileFromDevice(deviceSerial, cameraNo, startDate, endDate)
             val playbackResult = list.firstOrNull()?.let { file ->
                 player?.startPlayback(file) ?: false
             } ?: false

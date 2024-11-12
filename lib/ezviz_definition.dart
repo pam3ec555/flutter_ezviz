@@ -135,7 +135,7 @@ class EzvizPlayerStatus {
   final int status;
 
   /// 错误信息，只有在Error状态才不为空
-  final String message;
+  final String? message;
 
   EzvizPlayerStatus({required this.status, required this.message});
 

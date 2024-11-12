@@ -2,18 +2,22 @@ package com.tapnetic.flutter_ezviz.flutter_ezviz
 
 import android.content.Context
 import android.view.View
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.platform.PlatformView
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.text.SimpleDateFormat
 import java.util.*
+import android.util.Log
 
-class EzvizFlutterPlayerView(context: Context, registrar: PluginRegistry.Registrar, id: Int) :
-    PlatformView, MethodChannel.MethodCallHandler, EventChannel.StreamHandler, EzvizPlayerEventHandler {
+class EzvizFlutterPlayerView(
+    context: Context,
+    messenger: BinaryMessenger, // Используем BinaryMessenger вместо PluginRegistry.Registrar
+    id: Int
+) : PlatformView, MethodChannel.MethodCallHandler, EventChannel.StreamHandler, EzvizPlayerEventHandler {
 
     private val player: EzvizPlayerView = EzvizPlayerView(context)
     private val methodChannel: MethodChannel
@@ -22,10 +26,10 @@ class EzvizFlutterPlayerView(context: Context, registrar: PluginRegistry.Registr
 
     init {
         player.eventHandler = this
-        val methodChannelName = EzvizPlayerChannelMethods.methodChannelName + "_${id}"
-        val eventChannelName = EzvizPlayerChannelEvents.eventChannelName + "_${id}"
-        methodChannel = MethodChannel(registrar.messenger(), methodChannelName)
-        eventChannel = EventChannel(registrar.messenger(), eventChannelName)
+        val methodChannelName = EzvizPlayerChannelMethods.methodChannelName + "_$id"
+        val eventChannelName = EzvizPlayerChannelEvents.eventChannelName + "_$id"
+        methodChannel = MethodChannel(messenger, methodChannelName)
+        eventChannel = EventChannel(messenger, eventChannelName)
         eventChannel.setStreamHandler(this)
         methodChannel.setMethodCallHandler(this)
     }
@@ -46,12 +50,12 @@ class EzvizFlutterPlayerView(context: Context, registrar: PluginRegistry.Registr
             }
 
             EzvizPlayerChannelMethods.initPlayerByUser -> {
-                // TODO(Ramil): update this to new version of lib
-//                val map = call.arguments as? Map<*, *>
-//                val userId = map?.get("userId") as? Int ?: 0
-//                val cameraNo = map?.get("cameraNo") as? Int ?: 0
-//                val streamType = map?.get("streamType") as? Int ?: 0
-//                player.initPlayer(userId, cameraNo, streamType)
+                // TODO: обновите это для новой версии библиотеки
+                // val map = call.arguments as? Map<*, *>
+                // val userId = map?.get("userId") as? Int ?: 0
+                // val cameraNo = map?.get("cameraNo") as? Int ?: 0
+                // val streamType = map?.get("streamType") as? Int ?: 0
+                // player.initPlayer(userId, cameraNo, streamType)
             }
 
             EzvizPlayerChannelMethods.initPlayerUrl -> {
@@ -98,11 +102,11 @@ class EzvizFlutterPlayerView(context: Context, registrar: PluginRegistry.Registr
         }
     }
 
-    override fun onListen(p0: Any?, p1: EventChannel.EventSink?) {
-        this.eventSink = p1
+    override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+        this.eventSink = events
     }
 
-    override fun onCancel(p0: Any?) {
+    override fun onCancel(arguments: Any?) {
         this.eventSink = null
     }
 

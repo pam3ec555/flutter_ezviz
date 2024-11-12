@@ -3,7 +3,7 @@ package com.tapnetic.flutter_ezviz.flutter_ezviz
 import com.videogo.exception.BaseException
 import com.videogo.openapi.EZConstants
 import com.videogo.openapi.EZHCNetDeviceSDK
-import com.videogo.openapi.EZOpenSDK
+import com.videogo.openapi.EZGlobalSDK
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,22 +24,22 @@ object EzvizManager {
     )
 
     fun sdkVersion(result: Result) {
-        result.success(EZOpenSDK.getVersion())
+        result.success(EZGlobalSDK.getVersion())
     }
 
     fun initSDK(arguments: Any?, result: Result) {
         val map = arguments as? Map<*, *>
         map?.let {
-            val appKey = it["appKey"] as? String ?: AppKey
-            val accessToken = it["accessToken"] as? String ?: AccessToken
+            val appKey = it["appKey"] as? String ?: ""
+            val accessToken = it["accessToken"] as? String ?: ""
             val enableLog = it["enableLog"] as? Boolean ?: false
             val enableP2P = it["enableP2P"] as? Boolean ?: false
             val application = ApplicationUtils.application
             application?.let { app ->
-                val ret = EZOpenSDK.initLib(app, appKey)
-                EZOpenSDK.enableP2P(enableP2P)
-                EZOpenSDK.showSDKLog(enableLog)
-                EZOpenSDK.getInstance().setAccessToken(accessToken)
+                val ret = EZGlobalSDK.initLib(app, appKey)
+                EZGlobalSDK.enableP2P(enableP2P)
+                EZGlobalSDK.showSDKLog(enableLog)
+                EZGlobalSDK.getInstance().setAccessToken(accessToken)
                 EZHCNetDeviceSDK.getInstance()
                 result.success(ret)
             }
@@ -50,7 +50,7 @@ object EzvizManager {
         val map = arguments as? Map<*, *>
         map?.let {
             val debug = it["enableLog"] as? Boolean ?: false
-            EZOpenSDK.showSDKLog(debug)
+            EZGlobalSDK.showSDKLog(debug)
         }
     }
 
@@ -58,7 +58,7 @@ object EzvizManager {
         val map = arguments as? Map<*, *>
         map?.let {
             val debug = it["enableP2P"] as? Boolean ?: false
-            EZOpenSDK.enableP2P(debug)
+            EZGlobalSDK.enableP2P(debug)
         }
     }
 
@@ -66,7 +66,7 @@ object EzvizManager {
         val map = arguments as? Map<*, *>
         map?.let {
             val accessToken = it["accessToken"] as? String ?: ""
-            EZOpenSDK.getInstance().setAccessToken(accessToken)
+            EZGlobalSDK.getInstance().setAccessToken(accessToken)
         }
     }
 
@@ -76,7 +76,7 @@ object EzvizManager {
             map?.let {
                 try {
                     val deviceSerial = it["deviceSerial"] as? String ?: ""
-                    val deviceInfo = EZOpenSDK.getInstance().getDeviceInfo(deviceSerial)
+                    val deviceInfo = EZGlobalSDK.getInstance().getDeviceInfo(deviceSerial)
                     withContext(Dispatchers.Main) {
                         if (deviceInfo == null) {
                             result.success(null)
@@ -102,7 +102,7 @@ object EzvizManager {
     fun getDeviceList(result: Result) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val deviceInfoList = EZOpenSDK.getInstance().getDeviceList(0, 100)
+                val deviceInfoList = EZGlobalSDK.getInstance().getDeviceList(0, 100)
                 withContext(Dispatchers.Main) {
                     if (deviceInfoList.isNullOrEmpty()) {
                         result.success(null)
@@ -134,7 +134,7 @@ object EzvizManager {
             val videoLevel = it["videoLevel"] as? Int ?: 0
 
             CoroutineScope(Dispatchers.IO).launch {
-                val ret = EZOpenSDK.getInstance().setVideoLevel(deviceSerial, cameraId, videoLevel)
+                val ret = EZGlobalSDK.getInstance().setVideoLevel(deviceSerial, cameraId, videoLevel)
                 withContext(Dispatchers.Main) {
                     result.success(ret)
                 }
@@ -154,7 +154,7 @@ object EzvizManager {
 
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        val ret = EZOpenSDK.getInstance().controlPTZ(
+                        val ret = EZGlobalSDK.getInstance().controlPTZ(
                             deviceSerial,
                             cameraId,
                             EZConstants.EZPTZCommand.valueOf(ptzKeys[command] ?: ""),

@@ -64,8 +64,14 @@ class EzvizManager {
     if (options == null) {
       options = EzvizInitOptions();
     }
-    final bool result = await _channel.invokeMethod(EzvizChannelMethods.initSDK,options.toJson());
-    return result;
+    try {
+      final bool result = await _channel.invokeMethod(EzvizChannelMethods.initSDK,options.toJson());
+      print('result = $result');
+      return result;
+    } catch (e) {
+      ezvizLog('ERROR =  $e');
+      return false;
+    }
   }
 
   /// 是否开启日志

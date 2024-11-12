@@ -62,8 +62,13 @@ class EzvizPlayerController {
     Map<String, dynamic> data = new Map<String, dynamic>();
     data['deviceSerial'] = deviceSerial;
     data['cameraNo'] = cameraNo;
-    await _channel.invokeMethod(
-        EzvizPlayerChannelMethods.initPlayerByDevice, data);
+    try {
+      await _channel.invokeMethod(
+          EzvizPlayerChannelMethods.initPlayerByDevice, data);
+      print("INITED");
+    } catch (e) {
+      print("ERROR: $e");
+    }
   }
 
   /// 初始化播放器

@@ -1,6 +1,3 @@
-group = "com.tapnetic.flutter_ezviz.flutter_ezviz"
-version = "1.0-SNAPSHOT"
-
 buildscript {
     ext.kotlin_version = "1.8.22"
     repositories {
@@ -13,6 +10,13 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
+
+plugins {
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.22'
+}
+
+group = "com.tapnetic.flutter_ezviz.flutter_ezviz"
+version = "1.0-SNAPSHOT"
 
 allprojects {
     repositories {
@@ -69,5 +73,7 @@ android {
 
 dependencies {
     implementation "io.github.ezviz-open:ezviz-sdk:5.13"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
 }

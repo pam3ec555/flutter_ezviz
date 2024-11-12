@@ -2,8 +2,6 @@ package com.tapnetic.flutter_ezviz.flutter_ezviz
 
 import com.videogo.openapi.EZConstants
 import kotlinx.serialization.*
-const val AppKey: String = "888b1f2a00d14aee910d1a7437669a2a"
-const val AccessToken: String = "at.1zvz23zq4ahu89r1cf1fmlv41s0h8g22-6t4r5o4vql-1hvx6ud-h0myuu18u"
 
 const val Action_START = "EZPTZAction_START"
 const val Action_STOP  = "EZPTZAction_STOP"
